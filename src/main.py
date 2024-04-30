@@ -33,6 +33,10 @@ class PromptGenerator:
             # get the prompt list based on the instruction id
             prompts = random.choice(PROMPT_LST[music.instruction_id])
 
+            # filter clap description
+            music.clap_desc = music.clap_desc.replace('The low quality recording features ', '').replace(
+                'the recording is noisy', '').replace('The audio quality is poor', '').replace('in mono', '')
+
             # replace the placeholder with the actual music description
             prompts = prompts.replace("{CLAPS}", music.clap_desc)
             prompts = prompts.replace("{METADATA}", music.metadata)
