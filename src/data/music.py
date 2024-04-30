@@ -9,5 +9,5 @@ class Music:
 
     name: str
     clap_desc: str
-    metadata: str = None
+    metadata: str = ''
     instruction_id: int = 1
