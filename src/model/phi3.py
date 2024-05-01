@@ -28,7 +28,7 @@ class Phi3Model:
         """
 
         msgs = []
-        batch_size = 31     # for 32 batch sizes
+        batch_size = 7     # for 8 batch sizes
 
         # convert the prompt to the format that the model can understand
         if isinstance(prompts, list):
@@ -41,14 +41,19 @@ class Phi3Model:
             msgs.append(self.tokenizer.apply_chat_template(
                 [INSTRUCT_PHI3, {"role": "user", "content": prompts.content}], add_generation_prompt=True, return_tensors="pt", tokenize=False)
             )
-        output_sequences = torch.Tensor([]).to(self.model.device)
+        output_sequences = None
         msgs_batch = np.array_split(np.array(msgs), len(msgs) // batch_size + 1)
         for msgs in msgs_batch:
             if msgs.size == 0:
                 continue
             inputs = self.tokenizer(
-                msgs, return_tensors="pt", padding=True).to(self.model.device)
-            output_sequences = torch.cat(output_sequences, self.model.generate(**inputs, max_new_tokens=512))
+                msgs.tolist(), return_tensors="pt", padding=True).to(self.model.device)
+            out = self.model.generate(**inputs, max_new_tokens=512, do_sample=True, temperature=0.7, top_k=20, top_p=0.90).tolist()
+            if output_sequences is None:
+                output_sequences = out
+            else:
+                for micro_batch in out:
+                    output_sequences.append(micro_batch)
 
         # decode the output and remove the input prompt
         output = []
