@@ -45,3 +45,21 @@ class PromptGenerator:
             lst_prompts.append(Prompt(prompts))
 
         return self.model.generate_response(lst_prompts)
+
+    def generate_lyrics_from_music(self, musics: List[Music] | Music):
+        
+        lst_prompts = []
+        for music in (musics if isinstance(musics, list) else [musics]):
+            if music.instruction_id not in PROMPT_LST:
+                raise ValueError(
+                    f"Music with instruction id {music.instruction_id} does not have a corresponding prompt list."
+                )
+
+            prompts = random.choice(PROMPT_LST[music.instruction_id])
+            prompts = prompts.replace("{CLAPS}", music.clap_desc)
+            prompts = prompts.replace("{METADATA}", music.metadata)
+            prompts = prompts.replace("{NAME}", music.name)
+
+            lst_prompts.append(Prompt(prompts))
+            
+        return self.model.generate_response(lst_prompts)

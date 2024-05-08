@@ -15,10 +15,15 @@ _PROMPT_REMIX = [
     "hello world this is a test"
 ]
 
+_PROMPT_LYRICS = [
+    "hello world this is a test"
+]
+
 PROMPT_LST = {
     1: _PROMPT_MUSIC_GEN.copy(),
     2: _PROMPT_TTS.copy(),
-    3: _PROMPT_REMIX.copy
+    3: _PROMPT_REMIX.copy(),
+    4: _PROMPT_LYRICS.copy(),
 }
 
 # the instruction for the phi3 model
