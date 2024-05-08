@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.data.lyrics import Lyrics
+from .lyrics import Lyrics
 
 
 @dataclass

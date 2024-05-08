@@ -9,8 +9,8 @@ from .model.phi3 import Phi3Model
 
 
 class PromptGenerator:
-    def __init__(self):
-        self.model = Phi3Model()
+    def __init__(self, batch_size: int = 1):
+        self.model = Phi3Model(batch_size=batch_size)
 
     def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[Lyrics]:
 
@@ -49,7 +49,7 @@ class PromptGenerator:
 
             # replace the placeholder with the actual music description
             prompts = prompts.replace("{CLAPS}", music.clap_desc)
-            prompts = prompts.replace("{METADATA}", music.metadata)
+            prompts = prompts.replace("{METADATA}", "")   # music.metadata)
             prompts = prompts.replace("{NAME}", music.name)
 
             lst_prompts.append(Prompt(prompts))
