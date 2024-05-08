@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from .lyrics import Lyrics
+
 
 @dataclass
 class Music:
@@ -11,3 +13,4 @@ class Music:
     clap_desc: str
     metadata: str = 'No metadata available'
     instruction_id: int = 1
+    lyrics: Lyrics = None

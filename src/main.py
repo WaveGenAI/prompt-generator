@@ -1,15 +1,25 @@
 import random
 from typing import List
 
-from .config import PROMPT_LST
+from .config import PROMPT_LST, PROMPT_FORMAT_LYRICS
+from .data.lyrics import Lyrics
 from .data.music import Music
 from .data.prompt import Prompt
 from .model.phi3 import Phi3Model
 
 
 class PromptGenerator:
-    def __init__(self):
-        self.model = Phi3Model()
+    def __init__(self, batch_size: int = 1):
+        self.model = Phi3Model(batch_size=batch_size)
+
+    def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[Lyrics]:
+
+        lst_lyrics = []
+
+        for lyric in (lyrics if isinstance(lyrics, list) else [lyrics]):
+            lst_lyrics.append(Lyrics(PROMPT_FORMAT_LYRICS[0].replace('{LYRICS}', lyric.content)))    # just a trick
+
+        return self.model.generate_response(lst_lyrics)
 
     def generate_prompt_from_music(self, musics: List[Music] | Music) -> List[Prompt]:
         """Method to generate prompt from music data.
@@ -18,7 +28,7 @@ class PromptGenerator:
         :type musics: List[Music]
         :raises ValueError: if the music does not have a corresponding prompt list
         :return: the generated prompt that corresponds to the music data
-        :rtype: List[Prompt]
+        :rtype: List[str]
         """
 
         lst_prompts = []
@@ -39,7 +49,7 @@ class PromptGenerator:
 
             # replace the placeholder with the actual music description
             prompts = prompts.replace("{CLAPS}", music.clap_desc)
-            prompts = prompts.replace("{METADATA}", music.metadata)
+            prompts = prompts.replace("{METADATA}", "")   # music.metadata)
             prompts = prompts.replace("{NAME}", music.name)
 
             lst_prompts.append(Prompt(prompts))
