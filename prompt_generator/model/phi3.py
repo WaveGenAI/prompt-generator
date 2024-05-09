@@ -18,9 +18,9 @@ class Phi3Model:
 
     def __init__(self, batch_size: int = 7): # for 8 batch sizes
         self.tokenizer = AutoTokenizer.from_pretrained(
-            "microsoft/Phi-3-mini-128k-instruct", trust_remote_code=True)
+            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained(
-            "microsoft/Phi-3-mini-128k-instruct", torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
+            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
         self.batch_size = batch_size
 
     def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[Prompt | Lyrics]:
