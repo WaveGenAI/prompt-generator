@@ -20,7 +20,7 @@ class Phi3Model:
         self.tokenizer = AutoTokenizer.from_pretrained(
             "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained(
-            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
+            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", device_map="auto", trust_remote_code=True)
         self.batch_size = batch_size
 
     def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[Prompt | Lyrics]:
