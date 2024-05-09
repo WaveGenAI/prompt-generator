@@ -20,8 +20,9 @@ class Phi3Model:
         self.tokenizer = AutoTokenizer.from_pretrained(
             "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained(
-            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", device_map="auto", trust_remote_code=True)
+            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit",attn_implementation="flash_attention_2", device_map="auto", trust_remote_code=True)
         self.batch_size = batch_size
+        self.tokenizer.padding_side = "left"
 
     def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[Prompt | Lyrics]:
         """Method to generate response from the model.
@@ -63,7 +64,8 @@ class Phi3Model:
         # decode the output and remove the input prompt
         output = []
         for idx, out in enumerate(self.tokenizer.batch_decode(output_sequences, skip_special_tokens=True)):
-            cleaned_output = out.replace(prompts[idx].content if isinstance(prompts, list) else prompts.content, "").strip()
+            cleaned_output = (out.replace(prompts[idx].content if isinstance(prompts, list) else prompts.content, "")
+                              .replace(INSTRUCT_PHI3["content"], "").strip())
             prompts[idx].content = cleaned_output
             output.append(prompts[idx])
 
