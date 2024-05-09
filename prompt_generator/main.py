@@ -12,8 +12,7 @@ class PromptGenerator:
     def __init__(self, batch_size: int = 1):
         self.model = Phi3Model(batch_size=batch_size)
 
-    def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[Lyrics]:
-
+    def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[str]:
         lst_lyrics = []
 
         for lyric in (lyrics if isinstance(lyrics, list) else [lyrics]):
@@ -21,7 +20,7 @@ class PromptGenerator:
 
         return self.model.generate_response(lst_lyrics)
 
-    def generate_prompt_from_music(self, musics: List[Music] | Music) -> List[Prompt]:
+    def generate_prompt_from_music(self, musics: List[Music] | Music) -> List[str]:
         """Method to generate prompt from music data.
 
         :param musics: the list of music data that will be used to generate the prompt
@@ -56,8 +55,7 @@ class PromptGenerator:
 
         return self.model.generate_response(lst_prompts)
 
-    def generate_lyrics_from_music(self, musics: List[Music] | Music):
-        
+    def generate_lyrics_from_music(self, musics: List[Music] | Music) -> List[str]:
         lst_prompts = []
         for music in (musics if isinstance(musics, list) else [musics]):
             if music.instruction_id not in PROMPT_LST:
