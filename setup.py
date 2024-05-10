@@ -18,5 +18,8 @@ setup(
     python_requires=">=3.8",
     packages=find_packages(),
     install_requires=requirements,
-    include_package_data=True
+    include_package_data=True,
+    dependency_links=[
+        'https://abetlen.github.io/llama-cpp-python/whl/cu124'
+    ]
 )
