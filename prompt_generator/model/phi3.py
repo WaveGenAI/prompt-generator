@@ -1,8 +1,8 @@
 from typing import List
 
-import torch
-from llama_cpp import Llama
-from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
+import languagemodels as lm
+import numpy as np
+from transformers import AutoTokenizer
 
 from ..config import INSTRUCT_PHI3
 from ..data.lyrics import Lyrics
@@ -14,16 +14,10 @@ class Phi3Model:
     """
 
     def __init__(self, batch_size: int = 7): # for 8 batch sizes
-        self.llm = Llama.from_pretrained(
-            repo_id="pjh64/Phi-3-mini-128K-Instruct.gguf",
-            filename="*q4_k_m.gguf",
-            flash_attn=True,
-            n_gpu_layers=-1,
-            n_ctx=6000,
-            use_mlock=False,
-            verbose=False,
-            draft_model=LlamaPromptLookupDecoding(max_ngram_size=3, num_pred_tokens=5)  # boost?
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", trust_remote_code=True)
+        lm.config['instruct_model'] = 'Phi-3-mini-4k-instruct'
+        lm.config["device"] = "auto"
         self.batch_size = batch_size
 
     def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[Prompt | Lyrics]:
@@ -36,11 +30,31 @@ class Phi3Model:
         """
 
         msgs = []
+        # convert the prompt to the format that the model can understand
         if isinstance(prompts, list):
             for prompt in prompts:
-                prompt.content = self.llm.create_chat_completion(
-                        [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}])["choices"][0]["message"]["content"]
-                msgs.append(prompt)
+                msgs.append(
+                    self.tokenizer.apply_chat_template(
+                        [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}], add_generation_prompt=True, return_tensors="pt", tokenize=False)
+                )
         else:
-            msgs.append(self.llm.create_chat_completion([INSTRUCT_PHI3, {"role": "user", "content": prompts.content}])["choices"][0]["message"]["content"])
-        return msgs
+            msgs.append(self.tokenizer.apply_chat_template(
+                [INSTRUCT_PHI3, {"role": "user", "content": prompts.content}], add_generation_prompt=True, return_tensors="pt", tokenize=False)
+            )
+        output_sequences = []
+        msgs_batch = np.array_split(np.array(msgs), len(msgs) // self.batch_size + 1)
+        i = 0
+        for msgs in msgs_batch:
+            if msgs.size == 0:
+                continue
+
+            out = lm.generate(msgs.tolist(), max_tokens=300, temperature=0.2, topk=10,)
+            if output_sequences is None:
+                output_sequences = out
+            else:
+                for micro_batch in out:
+                    prompts[i].content = micro_batch
+                    output_sequences.append(prompts[i])
+                    i += 1
+
+        return output_sequences
