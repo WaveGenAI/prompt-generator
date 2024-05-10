@@ -3,4 +3,3 @@ transformers
 accelerate
 sentencepiece
 bitsandbytes
-llama-cpp-python -C cmake.args="-DLLAMA_CUDA=on"
