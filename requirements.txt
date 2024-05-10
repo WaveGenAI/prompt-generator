@@ -3,3 +3,6 @@ transformers
 accelerate
 sentencepiece
 bitsandbytes
+--extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
+llama-cpp-python 
+
