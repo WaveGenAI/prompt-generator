@@ -2,4 +2,5 @@ torch
 transformers
 accelerate
 sentencepiece
-bitsandbytes
+bitsandbytes 
+llama-cpp-python

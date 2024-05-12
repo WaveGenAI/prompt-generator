@@ -1,6 +1,5 @@
 from typing import List
 
-import torch
 from llama_cpp import Llama
 from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 
@@ -13,7 +12,7 @@ class Phi3Model:
     """Interface to use the Phi-3 model.
     """
 
-    def __init__(self, batch_size: int = 7): # for 8 batch sizes
+    def __init__(self, batch_size: int = 7):  # for 8 batch sizes
         self.llm = Llama.from_pretrained(
             repo_id="pjh64/Phi-3-mini-128K-Instruct.gguf",
             filename="*q4_k_m.gguf",
@@ -22,7 +21,8 @@ class Phi3Model:
             n_ctx=6000,
             use_mlock=False,
             verbose=False,
-            draft_model=LlamaPromptLookupDecoding(max_ngram_size=3, num_pred_tokens=5)  # boost?
+            draft_model=LlamaPromptLookupDecoding(
+                max_ngram_size=3, num_pred_tokens=5)  # boost?
         )
         self.batch_size = batch_size
 
@@ -39,8 +39,9 @@ class Phi3Model:
         if isinstance(prompts, list):
             for prompt in prompts:
                 prompt.content = self.llm.create_chat_completion(
-                        [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}])["choices"][0]["message"]["content"]
+                    [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}])["choices"][0]["message"]["content"]
                 msgs.append(prompt)
         else:
-            msgs.append(self.llm.create_chat_completion([INSTRUCT_PHI3, {"role": "user", "content": prompts.content}])["choices"][0]["message"]["content"])
+            msgs.append(self.llm.create_chat_completion([INSTRUCT_PHI3, {
+                        "role": "user", "content": prompts.content}])["choices"][0]["message"]["content"])
         return msgs
