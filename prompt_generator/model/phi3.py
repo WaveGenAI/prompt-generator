@@ -20,7 +20,7 @@ class Phi3Model:
             n_gpu_layers=-1,
             n_ctx=6000,
             use_mlock=False,
-            verbose=True,
+            verbose=False,
             draft_model=LlamaPromptLookupDecoding(
                 max_ngram_size=3, num_pred_tokens=5)  # boost?
         )
