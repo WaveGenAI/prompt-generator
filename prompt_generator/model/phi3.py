@@ -26,7 +26,7 @@ class Phi3Model:
         )
         self.batch_size = batch_size
 
-    def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[Prompt | Lyrics]:
+    def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[str]:
         """Method to generate response from the model.
 
         :param prompts: The prompts that will be used to generate the response

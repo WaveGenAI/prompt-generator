@@ -21,7 +21,7 @@ class PromptGenerator:
 
         return self.model.generate_response(lst_lyrics)
 
-    def generate_prompt_from_music(self, musics: List[Music] | Music) -> List[Prompt]:
+    def generate_prompt_from_music(self, musics: List[Music] | Music) -> List[str]:
         """Method to generate prompt from music data.
 
         :param musics: the list of music data that will be used to generate the prompt
@@ -56,7 +56,7 @@ class PromptGenerator:
 
         return self.model.generate_response(lst_prompts)
 
-    def generate_lyrics_from_music(self, musics: List[Music] | Music):
+    def generate_lyrics_from_music(self, musics: List[Music] | Music) -> List[str]:
         
         lst_prompts = []
         for music in (musics if isinstance(musics, list) else [musics]):
