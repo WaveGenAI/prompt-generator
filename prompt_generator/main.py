@@ -12,7 +12,7 @@ class PromptGenerator:
     def __init__(self, batch_size: int = 1):
         self.model = Phi3Model(batch_size=batch_size)
 
-    def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[Lyrics]:
+    def generate_formated_lyrics(self, lyrics: List[Lyrics] | Lyrics) -> List[str]:
 
         lst_lyrics = []
 
