@@ -178,7 +178,7 @@ setup(
     description="A small package to create prompt",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/WaveGenAI/lyrics.git",
+    url="https://github.com/WaveGenAI/prompt-generator.git",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
