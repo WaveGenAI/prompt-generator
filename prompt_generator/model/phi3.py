@@ -9,8 +9,7 @@ from ..data.prompt import Prompt
 
 
 class Phi3Model:
-    """Interface to use the Phi-3 model.
-    """
+    """Interface to use the Phi-3 model."""
 
     def __init__(self, batch_size: int = 7):  # for 8 batch sizes
         self.llm = Llama.from_pretrained(
@@ -22,11 +21,15 @@ class Phi3Model:
             use_mlock=False,
             verbose=False,
             draft_model=LlamaPromptLookupDecoding(
-                max_ngram_size=3, num_pred_tokens=5)  # boost?
+                max_ngram_size=3, num_pred_tokens=5
+            ),  # boost?
         )
         self.batch_size = batch_size
 
-    def generate_response(self, prompts: List[Prompt | Lyrics] | Prompt | Lyrics, ) -> List[str]:
+    def generate_response(
+        self,
+        prompts: List[Prompt | Lyrics] | Prompt | Lyrics,
+    ) -> List[str]:
         """Method to generate response from the model.
 
         :param prompts: The prompts that will be used to generate the response
@@ -38,10 +41,15 @@ class Phi3Model:
         msgs = []
         if isinstance(prompts, list):
             for prompt in prompts:
-                prompt.content = self.llm.create_chat_completion(
-                    [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}])["choices"][0]["message"]["content"]
-                msgs.append(prompt)
+                msgs.append(
+                    self.llm.create_chat_completion(
+                        [INSTRUCT_PHI3, {"role": "user", "content": prompt.content}]
+                    )["choices"][0]["message"]["content"]
+                )
         else:
-            msgs.append(self.llm.create_chat_completion([INSTRUCT_PHI3, {
-                        "role": "user", "content": prompts.content}])["choices"][0]["message"]["content"])
+            msgs.append(
+                self.llm.create_chat_completion(
+                    [INSTRUCT_PHI3, {"role": "user", "content": prompts.content}]
+                )["choices"][0]["message"]["content"]
+            )
         return msgs
