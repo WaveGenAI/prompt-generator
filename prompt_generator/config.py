@@ -1,9 +1,29 @@
 _PROMPT_MUSIC_GEN = [
-    "Build a prompt of 1~2 lines that will be put in a music generation model to reproduce the music. \
-        Split each element with a ',' and insert only element for which the description is most likely correct. \
-            The most reliable information are, in order, the title, the metadatas and after the music description. \
-                You will not put the title directly in the prompt, but you can use the title to obtain some element and put them in the prompt. \
-                    The music \"{NAME}\" metadatas are: {METADATA} and the full no-accurate description of the music for each slice of 10 seconds is: {CLAPS}.",
+    """
+    You are an expert in creating prompts for AI models for music generation. Your task is to write a concise prompt of 10-20 words to describe a piece of music based on the provided information.
+
+    The name of the music piece is:
+    <name>
+    {NAME}
+    </name>
+
+    The metadata of the music piece is:
+    <metadata>
+    {METADATA}
+    </metadata>
+
+    A no-accurate description of the music for each 10-second slice is provided below:
+    <claps>
+    {CLAPS}
+    </claps>
+
+    <thinkingstep>
+    Carefully analyze the name, metadata, and the no-accurate description of the music piece. Consider the key elements, such as the genre, mood, instruments, and the progression of the music over time. Identify the most important aspects that capture the essence of the music piece.
+    </thinkingstep>
+
+    Based on your analysis, write a concise and descriptive prompt of 10-20 words that encapsulates the core characteristics of the music piece. Output your prompt inside <prompt> tags.
+    </thinkingstep>
+    """.strip(),
 ]
 
 
@@ -27,11 +47,21 @@ PROMPT_LST = {
 
 
 PROMPT_FORMAT_LYRICS = [
-    """You have been given a text that is originally a song lyric. Your task is to reformat this text to clearly reflect its structure as a song, identifying and labeling each part of the song (e.g., verse, chorus, bridge) accordingly. A chorus is repeated and a verse change each time. Number the verse. Use brackets to label each part at the beginning, such as [Verse1], [Chorus], [Bridge], etc. Separate each line clearly, and ensure that stanzas are properly distinguished from each other. Preserve rhyme scheme, and any repetitive elements exactly as they appear in the original lyric. Here is the text:
+    """
+    Here is the text of a song lyric: 
+    <lyrics>
+    {LYRICS}
+    </lyrics>
 
-{LYRICS}
+    Your task is to reformat this lyric to clearly reflect the structure and flow of the song. To do this:
 
-Reformat and label the lyric to highlight the intended flow of the song. Make sure each part of the song is easily identifiable and formatted for readability."""
+    - Identify each distinct part of the song (verse, chorus, bridge, etc.) and label it using brackets at the beginning, like [Verse], [Chorus], [Bridge]
+    - Number each verse sequentially ([Verse 1], [Verse 2], etc.)
+    - Make sure stanzas are clearly distinguished from each other with a blank line in between
+    - Keep the original rhyme scheme and any phrases exactly as they appear in the source lyric
+
+    Write out the full song lyric with this new labeling and formatting. The goal is to make the intended flow and structure of the song obvious and easily readable.
+    """,
 ]
 
 # the instruction for the phi3 model
