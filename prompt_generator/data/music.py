@@ -14,3 +14,4 @@ class Music:
     metadata: str = 'No metadata available'
     instruction_id: int = 1
     lyrics: Lyrics = None
+    transformed_lyrics: Lyrics = None

@@ -48,20 +48,20 @@ PROMPT_LST = {
 
 PROMPT_FORMAT_LYRICS = [
     """
-    Here is the text of a song lyric: 
-    <lyrics>
+    Your are an expert in creating prompts for AI models for tagging.
+    Your task is to label the different parts of these song lyrics by adding the appropriate tag in square brackets at the start of each section. 
+
+    The tags you should use are:
+    - [VERSE] 
+    - [CHORUS]
+    - [BRIDGE]
+
+    For example, if a section of the lyrics is a verse, put [VERSE] at the start of the first line of that section.  Do not add too many label to the output. Write the complete lyric in the output, never remove any part of the lyric in the output.
+    Please make sure to separate each labeled section by a blank line. Do not write anything else besides the lyrics with the labels added. The output should just be the labeled lyrics with blank lines between sections.
+
+    Here are the lyrics to a song:
     {LYRICS}
-    </lyrics>
-
-    Your task is to reformat this lyric to clearly reflect the structure and flow of the song. To do this:
-
-    - Identify each distinct part of the song (verse, chorus, bridge, etc.) and label it using brackets at the beginning, like [Verse], [Chorus], [Bridge]
-    - Number each verse sequentially ([Verse 1], [Verse 2], etc.)
-    - Make sure stanzas are clearly distinguished from each other with a blank line in between
-    - Keep the original rhyme scheme and any phrases exactly as they appear in the source lyric
-
-    Write out the full song lyric with this new labeling and formatting. The goal is to make the intended flow and structure of the song obvious and easily readable.
-    """,
+    """.strip(),
 ]
 
 # the instruction for the phi3 model
