@@ -18,9 +18,9 @@ class Phi3Model:
 
     def __init__(self, batch_size: int = 7): # for 8 batch sizes
         self.tokenizer = AutoTokenizer.from_pretrained(
-            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit", trust_remote_code=True)
+            "microsoft/Phi-3-mini-4k-instruct", trust_remote_code=True, torch_dtype=torch.float16)
         self.model = AutoModelForCausalLM.from_pretrained(
-            "leliuga/Phi-3-mini-128k-instruct-bnb-4bit",attn_implementation="flash_attention_2", device_map="auto", trust_remote_code=True)
+            "microsoft/Phi-3-mini-4k-instruct",attn_implementation="flash_attention_2", device_map="auto", trust_remote_code=True, torch_dtype=torch.float16)
         self.batch_size = batch_size
         self.tokenizer.padding_side = "left"
 
