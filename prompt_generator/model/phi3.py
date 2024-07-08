@@ -2,7 +2,7 @@ from typing import List
 
 import torch
 import numpy as np
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from ..config import INSTRUCT_PHI3
 from ..data.prompt import Prompt
@@ -17,10 +17,14 @@ class Phi3Model:
     """
 
     def __init__(self, batch_size: int = 7): # for 8 batch sizes
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True, bnb_4bit_use_double_quant=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.bfloat16
+        )
+        
         self.tokenizer = AutoTokenizer.from_pretrained(
             "microsoft/Phi-3-mini-4k-instruct", trust_remote_code=True, torch_dtype=torch.float16)
         self.model = AutoModelForCausalLM.from_pretrained(
-            "microsoft/Phi-3-mini-4k-instruct",attn_implementation="flash_attention_2", device_map="auto", trust_remote_code=True, torch_dtype=torch.float16)
+            "microsoft/Phi-3-mini-4k-instruct",attn_implementation="flash_attention_2", device_map="auto", trust_remote_code=True, torch_dtype=torch.float16, quantization_config=bnb_config)
         self.batch_size = batch_size
         self.tokenizer.padding_side = "left"
 
