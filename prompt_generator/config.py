@@ -1,6 +1,6 @@
 _PROMPT_MUSIC_GEN = [
     """The music \"{NAME}\" metadatas are: {METADATA} and the full no-accurate description of the music for each slice of 10 seconds is: {CLAPS}. Describe the music with a list of keyword based on previous information. Should be the more accurate possible. Don't include timestamp in the description and no-standar character like ':-.'. 
-    Write in one unique line. Write nothing about the audio quality (if word noise, ignore it). The information provided may contain errors so try to cross-reference the information as much as possible"""
+    Write in one unique line. Write nothing about the audio quality (if word noise, ignore it). The information provided may contain errors so try to cross-reference the information as much as possible. Don't describe multiple music."""
 ]
 
 
